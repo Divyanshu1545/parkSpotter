@@ -3,7 +3,9 @@ package com.divyanshu.parkSpotter.models;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,11 +22,27 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@ToString
+
 @Table(name = "users")
 public class User implements UserDetails {
+  @Override
+  public String toString() {
+    return "User{" +
+            "id=" + id +
+            ", firstName='" + firstName + '\'' +
+            ", lastName='" + lastName + '\'' +
+            ", email='" + email + '\'' +
+            ", password='" + password + '\'' +
+            ", phoneNumber='" + phoneNumber + '\'' +
+            ", role=" + role +
+            ", parkingSpaces=" + parkingSpaces +
+            ", createdAt=" + createdAt +
+            ", updatedAt=" + updatedAt +
+            '}';
+  }
 
   @Id
+  @Column(name = "user_id")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   Long id;
   
@@ -41,7 +59,10 @@ public class User implements UserDetails {
   String phoneNumber;
 
   @Enumerated(EnumType.STRING)
+          @JsonIgnore
   Role role;
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
+  Set<ParkingSpace> parkingSpaces;
 
   LocalDateTime createdAt;
 

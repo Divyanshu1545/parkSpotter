@@ -1,5 +1,9 @@
 package com.divyanshu.parkSpotter.controllers;
 
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +33,7 @@ public class TestController {
 
   @GetMapping("/owners")
   @PreAuthorize("hasRole('OWNER')")
+  @Parameters({@Parameter(in = ParameterIn.HEADER,name = "Authorization",schema = @Schema(type = "string"))})
   public String ownersEndpoint(){
     return "Owner endpoint is hit";
   }
